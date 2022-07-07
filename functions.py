@@ -8,6 +8,7 @@ from google.oauth2 import service_account
 
 gcp_json_credentials_dict = json.loads(os.environ['creds'])
 credentials = service_account.Credentials.from_service_account_info(gcp_json_credentials_dict)
+cmc_creds = os.environ['cmc']
 
 # Creds are supplied through Airflow's environment variables
 
@@ -33,7 +34,7 @@ class extractLoad:
         }
         headers = {
           'Accepts': 'application/json',
-          'X-CMC_PRO_API_KEY': os.environ['X-CMC_PRO_API_KEY'],
+          'X-CMC_PRO_API_KEY': cmc_creds,
         }
         r = requests.get(url, headers=headers, params=parameters)
         r_json = r.json()
