@@ -25,9 +25,22 @@ class extractLoad:
     """
 
     def fetch_api(self):
-        r = requests.get("https://api.binance.com/api/v3/ticker/24hr")
+        url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+        parameters = {
+          'start':'1',
+          'limit':'5000',
+          'convert':'USD'
+        }
+        headers = {
+          'Accepts': 'application/json',
+          'X-CMC_PRO_API_KEY': os.environ['X-CMC_PRO_API_KEY'],
+        }
+        r = requests.get(url, headers=headers, params=parameters)
         r_json = r.json()
-        df = pd.read_json("https://api.binance.com/api/v3/ticker/24hr")
+        json_data = r_json['data']
+        df = pd.json_normalize(json_data, max_level=2)
+        df = df[df['name'].notnull()]
+        df.columns = df.columns.str.replace(".", "_")
         return df
     
     # Add datetime column - Minor Transformation
@@ -56,6 +69,6 @@ class extractLoad:
 
     def load_bigquery(self, dataframe):
         print("Data Loaded")
-        table_id = 'final-347314.main.binance_api'
+        table_id = 'final-347314.main.cmcap_api'
         client = bigquery.Client(credentials=credentials)
         client.load_table_from_dataframe(dataframe, table_id)
