@@ -10,17 +10,13 @@ gcp_json_credentials_dict = json.loads(os.environ['creds'])
 credentials = service_account.Credentials.from_service_account_info(gcp_json_credentials_dict)
 cmc_creds = os.environ['cmc']
 
-# Creds are supplied through Airflow's environment variables
 
 class extractLoad:
 
-    # Fetch prices from Binance API
+    # Fetch from CoinMarketCap API
 
     """
-    Fetches all information on every available pairs on Binance 
-    (cryptocurrency trading platform) as json
-    Converts to DataFrame with pandas built-in read_json
-
+    Fetches all information on every available currencies on CoinMarketCap
     Input : None
     Output : DataFrame
     """
