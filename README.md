@@ -1,2 +1,2 @@
-# binanceapi-el
-Simple EL script from Binance prices API to Google BigQuery
+# cmcapi-el
+EL Script from CoinMarketCap API to Google Bigquery
